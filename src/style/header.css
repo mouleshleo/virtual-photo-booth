@@ -1,120 +1,152 @@
-/* EventHeader.css */
+.box-1 {
+    background: linear-gradient(135deg, #0066cc, #003366);
+    padding: 20px;
+    width: 96.7%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    margin: auto;
+    transition: all 0.5s ease;
+}
+
 .top-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width:90%;
-}
-.box-1{
-    background-color: #0d6efd;
-    padding: 20px;
-    width: 96.7%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.logo-container{
-    margin-bottom: 10px;
-    text-align: left;
-    width:140px;
-    display: inline-flex;
-}
-  
-.logo{
-    width: 100px;
-    height: auto;
-}
-.booth-name{
-    color: #f8f9fa;
-    text-align: center;
-    margin-left: 100px;
-}
-.event-details{
-    text-align: center;
-    margin-right: -100px;
-}
-  
-.event-title{
-    font-size: 32px;
-    font-weight: bold;
-    margin: 0;
-    color: #f8f9fa; 
-}
-  
-.event-date{
-    font-size: 16px;
-    margin-top: 5px;
-    color: #d1d1d1;
-}
-  
-.nav-links{
-    margin-top: 10px;
-    margin-left: 70px;
-    display: flex;
-    justify-content: center;
-    width: 80%;
-}
-  
-.nav-link{
-    color: white;
-    text-decoration: none;
-    margin: 0 20px;
-    font-size: 17px;
-    transition: text-decoration-color 1s ease;
-}
-  
-.nav-link:hover {
-    color: #ffdd40;
-    text-decoration: underline;
-    cursor: pointer;
-    transition: text-decoration-color 1s ease;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
-@media (max-width: 768px){
-.event-header{
-      padding: 10px;
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
-  
-.logo{
-      width: 70px;
+
+.logo {
+    width: 90px;
+    height: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
 }
-  
-.event-title{
-      font-size: 28px;
+
+.logo:hover {
+    transform: scale(1.1);
 }
-  
-.event-date{
-      font-size: 14px;
+
+.booth-name h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffdd40;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    transition: color 0.3s ease;
 }
-  
-.nav-link{
-      font-size: 14px;
-      margin: 0 15px;
+
+.booth-name h1:hover {
+    color: #fff;
 }
+
+.event-details {
+    text-align: right;
+    margin-right: 20px;
 }
-  
-/* Styling for image carousel */
+
+.event-title {
+    font-size: 34px;
+    color: #ffdd40;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.event-date {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #f1f1f1;
+}
+
 .image-carousel {
     margin-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 150px; /* Set the height smaller */
+    height: 150px;
     overflow: hidden;
-  }
-  
+}
+
 .carousel-image {
-    width: 200px; /* Adjust the width to make the image smaller */
+    width: 200px;
     height: auto;
-    border-radius: 10px;
-    transition: opacity 0.5s ease-in-out; /* Smooth transition for images */
-  }
-  
+    transition: opacity 0.5s ease-in-out;
+}
+
 .carousel-image:not(:first-child) {
     display: none;
-  }
-  
-nav {
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
-  }
-  
-  
-  
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 17px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.nav-link:hover {
+    color: #ffdd40;
+    text-decoration: underline;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 70px;
+    }
+
+    .event-title {
+        font-size: 28px;
+    }
+
+    .event-date {
+        font-size: 16px;
+    }
+
+    .booth-name h1 {
+        font-size: 24px;
+    }
+
+    .nav-link {
+        font-size: 15px;
+        margin: 0 10px;
+    }
+
+    .top-box {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .event-details {
+        text-align: center;
+        margin-right: 0;
+    }
+}
+.box-1{
+    margin-bottom: 20px;
+    position: relative;
+}
+.box-1:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02);
+}

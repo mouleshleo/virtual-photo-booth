@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 import "../style/webcam.css";
 import axios from "axios";
 import image from '../assets/frame.png';
+import Confetti from 'react-confetti';  
 
 const frameImage = image;
 
@@ -14,7 +15,8 @@ const WebcamCapture = () => {
   const [customText, setCustomText] = useState("");
   const [email, setEmail] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-
+  const [showConfetti, setShowConfetti] = useState(false); 
+  const [notification, setNotification] = useState(null);  
   const captureImage = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
@@ -57,8 +59,7 @@ const WebcamCapture = () => {
       canvas.height = capturedImg.height;
 
       ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
-
-      ctx.drawImage(capturedImg,50,50,canvas.width-100, canvas.height-100);
+      ctx.drawImage(capturedImg, 50, 50, canvas.width - 100, canvas.height - 100);
 
       ctx.font = "20px Celandine";
       ctx.fillStyle = "black";
@@ -73,20 +74,39 @@ const WebcamCapture = () => {
         image_data: finalImage,
       });
 
-      alert("Photo sent successfully!");
-      setCustomText(null);
-      setEmail(null);
-      setCapturedImage(null);
-      setFinalImage(null);
-      setIsPopupVisible(false); 
+      // Show confetti after success
+      setShowConfetti(true);
+
+      // Show notification
+      setNotification("Email sent successfully!");
+
+      // Hide confetti and notification after 5 seconds
+      setTimeout(() => {
+        setShowConfetti(false);
+        setNotification(null);
+      }, 5000);
     } catch (error) {
       console.error("Error sending email:", error);
-      alert("Failed to send email. Try again later.");
+      setNotification("Failed to send email. Try again later.");
+      setTimeout(() => setNotification(null), 5000);
     }
+
+    setCustomText("");
+    setEmail("");
+    setCapturedImage(null);
+    setFinalImage(null);
+    setIsPopupVisible(false); 
   };
 
   return (
     <div className="webcam-container">
+      {showConfetti && <Confetti />}
+      {notification && (
+        <div className="notification" style={{ backgroundColor: "green", color: "white", padding: "10px", textAlign: "center" }}>
+          {notification}
+        </div>
+      )}
+
       <Webcam
         audio={false}
         ref={webcamRef}
