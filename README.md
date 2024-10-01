@@ -92,8 +92,8 @@ node server.js
 ├── src
 │   ├── assets
 │   │   ├── frame.png
-│   │   ├── nss_logo.png
-│   │   └── tce_logo.png
+│   │   ├── logo1.png
+│   │   └── logo2.png
 │   ├── components
 │   │   ├── header.jsx
 │   │   ├── sidepanel.jsx
