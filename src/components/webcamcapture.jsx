@@ -1,156 +1,50 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef, useCallback } from "react";
-import Webcam from "react-webcam";
-import "../style/webcam.css";
-import axios from "axios";
-import image from '../assets/frame.png';
-import Confetti from 'react-confetti';  
-
-const frameImage = image;
+import React, { useRef } from 'react';
 
 const WebcamCapture = () => {
-  const webcamRef = useRef(null);
-  const [capturedImage, setCapturedImage] = useState(null);
-  const [finalImage, setFinalImage] = useState(null);
-  const [customText, setCustomText] = useState("");
-  const [email, setEmail] = useState("");
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false); 
-  const [notification, setNotification] = useState(null);  
-  const captureImage = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setCapturedImage(imageSrc);
-    setIsPopupVisible(true); 
-  }, [webcamRef]);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
 
-  const handleTextChange = (e) => {
-    setCustomText(e.target.value);
-  };
+    const startCamera = () => {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoRef.current.srcObject = stream;
+                videoRef.current.play();
+            })
+            .catch(err => {
+                console.error('Error accessing webcam: ', err);
+            });
+    };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+    const captureImage = () => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+        const image_data = canvas.toDataURL('image/png');
+        
+        // Call your API here to send the email
+        sendEmail(image_data);
+    };
 
-  const loadImage = (src) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-    });
-  };
+    const sendEmail = (image_data) => {
+        const to_email = 'mouleshleo06@gmail.com'; // Replace with the actual recipient email
+        fetch('http://localhost:5000/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to_email, image_data }),
+        })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+    };
 
-  const handleSendEmail = async () => {
-    if (!email) {
-      alert("Please enter an email.");
-      return;
-    }
-
-    try {
-      const [capturedImg, frameImg] = await Promise.all([
-        loadImage(capturedImage),
-        loadImage(frameImage),
-      ]);
-
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      canvas.width = capturedImg.width;
-      canvas.height = capturedImg.height;
-
-      ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
-      ctx.drawImage(capturedImg, 50, 50, canvas.width - 100, canvas.height - 100);
-
-      ctx.font = "20px Celandine";
-      ctx.fillStyle = "black";
-      ctx.fillText(customText, 20, canvas.height - 20);
-
-      const finalImage = canvas.toDataURL("image/png");
-
-      setFinalImage(finalImage);
-
-      await axios.post("http://localhost:5000/send-email", {
-        to_email: email,
-        image_data: finalImage,
-      });
-
-      // Show confetti after success
-      setShowConfetti(true);
-
-      // Show notification
-      setNotification("Email sent successfully!");
-
-      // Hide confetti and notification after 5 seconds
-      setTimeout(() => {
-        setShowConfetti(false);
-        setNotification(null);
-      }, 5000);
-    } catch (error) {
-      console.error("Error sending email:", error);
-      setNotification("Failed to send email. Try again later.");
-      setTimeout(() => setNotification(null), 5000);
-    }
-
-    setCustomText("");
-    setEmail("");
-    setCapturedImage(null);
-    setFinalImage(null);
-    setIsPopupVisible(false); 
-  };
-
-  return (
-    <div className="webcam-container">
-      {showConfetti && <Confetti />}
-      {notification && (
-        <div className="notification" style={{ backgroundColor: "green", color: "white", padding: "10px", textAlign: "center" }}>
-          {notification}
+    return (
+        <div>
+            <video ref={videoRef} width="640" height="480" />
+            <button onClick={startCamera}>Start Camera</button>
+            <button onClick={captureImage}>Capture Image</button>
+            <canvas ref={canvasRef} width="640" height="480" style={{ display: 'none' }} />
         </div>
-      )}
-
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        className="webcam-feed"
-      />
-      <button className="capture-btn" onClick={captureImage}>
-        Capture Photo
-      </button>
-
-      {isPopupVisible && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>Preview Image</h2>
-            {finalImage ? (
-              <img src={finalImage} alt="Final" className="captured-image" />
-            ) : (
-              <p>Processing the image...</p>
-            )}
-            <input
-              type="text"
-              placeholder="Enter your custom text"
-              value={customText}
-              onChange={handleTextChange}
-              className="text-input"
-            />
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={handleEmailChange}
-              className="email-input"
-            />
-            <button className="send-email-btn" onClick={handleSendEmail}>
-              Send to Email
-            </button>
-            <button className="close-btn" onClick={() => setIsPopupVisible(false)}>
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default WebcamCapture;
