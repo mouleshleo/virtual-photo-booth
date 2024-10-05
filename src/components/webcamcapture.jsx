@@ -21,12 +21,11 @@ const WebcamCapture = () => {
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
         const image_data = canvas.toDataURL('image/png');
         
-        // Call your API here to send the email
         sendEmail(image_data);
     };
 
     const sendEmail = (image_data) => {
-        const to_email = 'mouleshleo06@gmail.com'; // Replace with the actual recipient email
+        const to_email = 'mouleshleo06@gmail.com'; 
         fetch('http://localhost:5000/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

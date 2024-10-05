@@ -8,9 +8,16 @@ import { configDotenv } from 'dotenv';
 const app = express();
 const port = 5000;
 
+app.use(express.static(path.join(__dirname, 'src/style')));
+
+
 configDotenv();
 app.use(cors());
 app.use(bodyParser.json({ limit: "10mb" }));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.post('/send-email', (req, res) => {
   const { to_email, image_data } = req.body;
@@ -30,8 +37,8 @@ app.post('/send-email', (req, res) => {
   const mailOptions = {
     from: process.env.EMAIL,
     to: to_email,
-    subject: 'Your Captured Image with Custom Text',
-    html: '<h3>Here is your photo with the custom text!</h3>',
+    subject: 'Your Captured Image',
+    html: '<h3>Here is your photo!</h3>',
     attachments: [
       {
         filename: 'custom-image.png',
@@ -57,6 +64,3 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
