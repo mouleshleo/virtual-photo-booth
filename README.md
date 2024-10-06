@@ -27,7 +27,7 @@ npm -v
 Create a directory and clone this repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/yourusername/virtual-photo-booth.git
+git clone https://github.com/mouleshleo/virtual-photo-booth.git
 ```
 
 ### 3. Install Dependencies
